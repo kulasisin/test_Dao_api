@@ -22,55 +22,6 @@
     </div>
 
     <script>
-      // 上傳圖片函數
-      // function uploadImage() {
-      //   const fileInput = document.getElementById("fileInput");
-      //   const file = fileInput.files[0];
-      //   const formData = new FormData();
-      //   formData.append("image", file);
-
-      //   const xhr = new XMLHttpRequest();
-      //   xhr.open("POST", "/draw");
-      //   xhr.onload = function () {
-      //     if (xhr.status === 200) {
-      //       console.log("圖片已成功上傳");
-      //       // 上傳成功後，刷新圖片列表
-      //       fetchImages();
-      //     } else {
-      //       console.error("圖片上傳失敗");
-      //     }
-      //   };
-      //   xhr.send(formData);
-      // }
-
-      // function uploadImage() {
-      //   const input = document.getElementById("fileInput");
-      //   if (!input.files[0]) {
-      //     alert("Please select a file first!");
-      //     return;
-      //   }
-
-      //   const formData = new FormData();
-      //   formData.append("image", input.files[0]);
-      //   // 檢視 formData 中的內容
-      //   for (let [key, value] of formData.entries()) {
-      //     console.log(key, value);
-      //   }
-      //   fetch("http://localhost:8080/upload", {
-      //     method: "POST",
-      //     body: formData,
-      //   })
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       console.log(data);
-      //       alert("Image uploaded successfully!");
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error:", error);
-      //       alert("Failed to upload image");
-      //     });
-      // }
-
       // 獲取圖片列表函數
       function fetchImages() {
         const xhr = new XMLHttpRequest();
@@ -117,7 +68,7 @@
           .then((data) => {
             console.log(data);
             alert(JSON.stringify(data.message));
-            fetchImages(); // 重新加载图片列表
+            fetchImages(); 
           })
           .catch((error) => {
             console.error("Error:", error);

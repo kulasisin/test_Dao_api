@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>繪圖應用</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <h1>台灣映像</h1>
+    <h2>上傳你的台灣映像：</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <label for="file-upload" class="custom-file-upload">選擇圖片</label>
+      <input type="file" name="image" id="fileInput" />
+      <button class="btn" type="button" onclick="uploadImage()">
+        上傳圖片
+      </button>
+    </form>
+    <h2>台灣映像GALLERY：</h2>
+    <div id="imageList">
+      <!-- 這裡顯示從後端獲取的圖片列表 -->
+    </div>
+
+    <script>
+      // 上傳圖片函數
+      // function uploadImage() {
+      //   const fileInput = document.getElementById("fileInput");
+      //   const file = fileInput.files[0];
+      //   const formData = new FormData();
+      //   formData.append("image", file);
+
+      //   const xhr = new XMLHttpRequest();
+      //   xhr.open("POST", "/draw");
+      //   xhr.onload = function () {
+      //     if (xhr.status === 200) {
+      //       console.log("圖片已成功上傳");
+      //       // 上傳成功後，刷新圖片列表
+      //       fetchImages();
+      //     } else {
+      //       console.error("圖片上傳失敗");
+      //     }
+      //   };
+      //   xhr.send(formData);
+      // }
+
+      // function uploadImage() {
+      //   const input = document.getElementById("fileInput");
+      //   if (!input.files[0]) {
+      //     alert("Please select a file first!");
+      //     return;
+      //   }
+
+      //   const formData = new FormData();
+      //   formData.append("image", input.files[0]);
+      //   // 檢視 formData 中的內容
+      //   for (let [key, value] of formData.entries()) {
+      //     console.log(key, value);
+      //   }
+      //   fetch("http://localhost:8080/upload", {
+      //     method: "POST",
+      //     body: formData,
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       console.log(data);
+      //       alert("Image uploaded successfully!");
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error:", error);
+      //       alert("Failed to upload image");
+      //     });
+      // }
+
+      // 獲取圖片列表函數
+      function fetchImages() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            const images = JSON.parse(xhr.responseText).data;
+            const imageList = document.getElementById("imageList");
+            imageList.innerHTML = ""; // 清空先前的列表
+
+            const ul = document.createElement("ul"); // 創建 ul 元素
+
+            images.forEach((image) => {
+              const li = document.createElement("li"); // 創建 li 元素
+
+              const img = document.createElement("img");
+              img.src = "data:image/jpeg;base64," + image.imageBase64; // 使用 Base64 URI
+              img.alt = image.filename;
+
+              li.appendChild(img); // 把 img 放到 li 中
+              ul.appendChild(li); // 把 li 放到 ul 中
+            });
+
+            imageList.appendChild(ul); // 把 ul 放到 imageList 中
+          } else {
+            console.error("獲取圖片列表失敗");
+          }
+        };
+        xhr.send();
+      }
+
+      // 初始加載圖片列表
+      fetchImages();
+    </script>
+
+    <script>
+      function uploadImage() {
+        const formData = new FormData(document.getElementById("uploadForm"));
+        fetch("https://daotaiwanapi.onrender.com/upload", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            alert(JSON.stringify(data.message));
+            fetchImages(); // 重新加载图片列表
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to upload image");
+          });
+      }
+    </script>
+    <script></script>
+  </body>
+</html>

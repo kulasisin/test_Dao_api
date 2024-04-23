@@ -148,36 +148,4 @@ h2 {
 .gallery li {
   flex: 0 0 calc(33.33% - 20px); /* 每個元素佔據 33.33% 寬度，並且設置一些間距 */
   margin: 0.5%;
-  /* }
-input[type="file"] {
-  display: none;
-}
-
-.btn,
-input,
-.custom-file-upload {
-  font-weight: 0;
-  font-size: 14px;
-  color: #fff;
-  background: linear-gradient(90deg, #2a9d8f 0%, #e9c46a 100%);
-  padding: 10px 30px;
-  border: solid #2a9d8f 2px;
-  box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
-  border-radius: 50px;
-  transition: 751ms;
-  transform: translateY(0);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  cursor: pointer;
-}
-
-.btn:hover {
-  transition: 751ms;
-  padding: 10px 50px;
-  transform: translateY(-0px);
-  background: linear-gradient(90deg, #2a9d8f 0%, #e9c46a 100%);
-  color: #264653;
-  border: solid 2px #e9c46a;
-} */
 }

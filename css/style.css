@@ -138,14 +138,14 @@ h1 {
 h2 {
   font-size: 30px;
 }
-#imageList {
+.gallery {
   margin: 0 auto;
 }
-#imageList ul {
+.gallery ul {
   display: flex;
   flex-wrap: wrap; /* 超出一行後換行 */
 }
-#imageList li {
+.gallery li {
   flex: 0 0 calc(33.33% - 20px); /* 每個元素佔據 33.33% 寬度，並且設置一些間距 */
   margin: 0.5%;
   /* }

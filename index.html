@@ -20,23 +20,34 @@
         <option value="type4">類別4</option>
         <option value="type5">類別5</option>
         <option value="type6">類別6</option>
+        <option value="type7">類別7</option>
+        <option value="type8">類別8</option>
+        <option value="type9">類別9</option>
+        <option value="type10">類別10</option>
       </select>
       <button class="btn" type="button" onclick="uploadImage()">
         上傳圖片
       </button>
     </form>
-    <h2>臺灣街景 GALLERY：</h2>
-    <div id="imageList">
+    <h2>臺灣街景 Processing：</h2>
+    <div id="imageList" class="gallery">
       <!-- 這裡顯示從後端獲取的圖片列表 -->
     </div>
-
+    <h2>臺灣街景 Result：</h2>
+    <div id="processedImageList" class="gallery">
+      <!-- 处理后的图片将被添加到这里 -->
+    </div>
     <script>
+      // 初始加载图片列表
+      fetchImages();
+      fetchProcessedImages();
+
       // 獲取圖片列表函數
       function fetchImages() {
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
+        // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
 
-        // xhr.open("GET", "http://localhost:8080/images");
+        xhr.open("GET", "http://localhost:8080/images");
         xhr.onload = function () {
           if (xhr.status === 200) {
             const images = JSON.parse(xhr.responseText).data;
@@ -49,13 +60,19 @@
               const li = document.createElement("li"); // 創建 li 元素
 
               const img = document.createElement("img");
-              img.src = image.url; // 使用 Base64 URI
+              img.src = image.url; // 使用 URL
               img.alt = image.filename;
 
+              const button = document.createElement("button");
+              button.textContent = "Process and Upload";
+              button.onclick = function () {
+                processAndUploadImage(image._id);
+              }; // 添加点击事件处理函数
+
               li.appendChild(img); // 把 img 放到 li 中
+              li.appendChild(button); // 添加按钮到 li
               ul.appendChild(li); // 把 li 放到 ul 中
             });
-
             imageList.appendChild(ul); // 把 ul 放到 imageList 中
           } else {
             console.error("獲取圖片列表失敗");
@@ -64,21 +81,102 @@
         xhr.send();
       }
 
-      // 初始加載圖片列表
-      fetchImages();
-    </script>
+      function processAndUploadImage(imageId) {
+        console.log(imageId);
+        fetch("http://localhost:8080/result/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ originalImageId: imageId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("Image processed and uploaded successfully");
+            console.log(data);
+            addProcessedImageToList(data); // 添加处理后的图片到列表
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to process and upload image");
+          });
+      }
 
-    <script>
+      // 将处理后的图片添加到列表中
+      function addProcessedImageToList(image) {
+        console.log(image);
+        const processedList =
+          document.getElementById("processedImageList") ||
+          createProcessedList();
+        const li = document.createElement("li");
+        const img = document.createElement("img");
+        img.src = image.data.url;
+        img.alt = image.data.filename;
+        li.appendChild(img);
+        processedList.appendChild(li);
+        fetchImages(); // 重新加载图片列表
+      }
+
+      // 创建已处理图片的列表
+      function createProcessedList() {
+        const list = document.createElement("ul");
+        list.id = "processedImageList";
+        document.body.appendChild(list);
+        return list;
+      }
+      function fetchProcessedImages() {
+        fetch("http://localhost:8080/results")
+          .then((response) => response.json())
+          .then((data) => {
+            const processedImageList =
+              document.getElementById("processedImageList");
+            processedImageList.innerHTML = "";
+            const ul = document.createElement("ul");
+
+            data.data.forEach((image) => {
+              const li = document.createElement("li");
+              const img = document.createElement("img");
+              img.src = image.url;
+              img.alt = image.filename;
+              li.appendChild(img);
+              ul.appendChild(li);
+            });
+            processedImageList.appendChild(ul);
+          })
+          .catch((error) =>
+            console.error("Failed to fetch processed images:", error)
+          );
+      }
+
+      function processAndUploadImage(imageId) {
+        fetch("http://localhost:8080/result/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ originalImageId: imageId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("Image processed and uploaded successfully");
+            fetchProcessedImages(); // Re-fetch the processed images list
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to process and upload image");
+          });
+      }
+
       function uploadImage() {
         const formData = new FormData(document.getElementById("uploadForm"));
-        fetch("https://daotaiwanapi.onrender.com/upload", {
+        // fetch("https://daotaiwanapi.onrender.com/upload", {
+        //   method: "POST",
+        //   body: formData,
+        // })
+        fetch("http://localhost:8080/upload", {
           method: "POST",
           body: formData,
         })
-          // fetch("http://localhost:8080/upload", {
-          //   method: "POST",
-          //   body: formData,
-          // })
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
@@ -91,6 +189,5 @@
           });
       }
     </script>
-    <script></script>
   </body>
 </html>

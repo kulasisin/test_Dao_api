@@ -20,20 +20,30 @@
         <option value="type4">類別4</option>
         <option value="type5">類別5</option>
         <option value="type6">類別6</option>
-        <option value="type7">類別7</option>
-        <option value="type8">類別8</option>
-        <option value="type9">類別9</option>
-        <option value="type10">類別10</option>
       </select>
       <button class="btn" type="button" onclick="uploadImage()">
         上傳圖片
       </button>
     </form>
     <h2>臺灣街景 Processing：</h2>
+
     <div id="imageList" class="gallery">
       <!-- 這裡顯示從後端獲取的圖片列表 -->
     </div>
     <h2>臺灣街景 Result：</h2>
+    <form id="uploadResultForm" enctype="multipart/form-data">
+      <label for="file-upload" class="custom-file-upload">選擇圖片</label>
+      <input type="file" name="imageData" id="resultInput" />
+      <input
+        type="text"
+        name="originalImageId"
+        id="originalImageIdInput"
+        placeholder="輸入原始圖片的ID"
+      />
+      <button class="btn" type="button" onclick="uploadLocalImage()">
+        上傳圖片
+      </button>
+    </form>
     <div id="processedImageList" class="gallery">
       <!-- 处理后的图片将被添加到这里 -->
     </div>
@@ -47,7 +57,7 @@
         const xhr = new XMLHttpRequest();
         // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
 
-        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
+        xhr.open("GET", "http://localhost:8080/images");
         xhr.onload = function () {
           if (xhr.status === 200) {
             const images = JSON.parse(xhr.responseText).data;
@@ -83,7 +93,7 @@
 
       function processAndUploadImage(imageId) {
         console.log(imageId);
-        fetch("https://daotaiwanapi.onrender.com/result/upload", {
+        fetch("http://localhost:8080/result/upload", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -125,7 +135,7 @@
         return list;
       }
       function fetchProcessedImages() {
-        fetch("https://daotaiwanapi.onrender.com/results")
+        fetch("http://localhost:8080/results")
           .then((response) => response.json())
           .then((data) => {
             const processedImageList =
@@ -149,7 +159,7 @@
       }
 
       function processAndUploadImage(imageId) {
-        fetch("https://daotaiwanapi.onrender.com/result/upload", {
+        fetch("http://localhost:8080/resultupload", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -169,11 +179,9 @@
 
       function uploadImage() {
         const formData = new FormData(document.getElementById("uploadForm"));
-        // fetch("https://daotaiwanapi.onrender.com/upload", {
-        //   method: "POST",
-        //   body: formData,
-        // })
-        fetch("https://daotaiwanapi.onrender.com/upload", {
+
+        console.log(formData);
+        fetch("http://localhost:8080/upload", {
           method: "POST",
           body: formData,
         })
@@ -182,6 +190,34 @@
             console.log(data);
             alert(JSON.stringify(data.message));
             fetchImages(); // 重新加载图片列表
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to upload image");
+          });
+      }
+      function uploadLocalImage() {
+        // 获取文件数据
+        const imageData = document.getElementById("resultInput").files[0];
+        // 获取原始图片ID
+        const originalImageId = document.getElementById(
+          "originalImageIdInput"
+        ).value;
+
+        // 构建 FormData 对象，并将文件数据和原始图片ID添加到其中
+        const formData = new FormData();
+        formData.append("imageData", imageData);
+        formData.append("originalImageId", originalImageId);
+
+        // 发送 POST 请求到服务器
+        fetch("http://localhost:8080/uploadresult", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("Image uploaded successfully");
+            fetchProcessedImages(); // 重新加载已处理的图片列表
           })
           .catch((error) => {
             console.error("Error:", error);

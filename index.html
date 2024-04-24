@@ -57,7 +57,7 @@
         const xhr = new XMLHttpRequest();
         // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
 
-        xhr.open("GET", "http://localhost:8080/images");
+        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
         xhr.onload = function () {
           if (xhr.status === 200) {
             const images = JSON.parse(xhr.responseText).data;
@@ -93,7 +93,7 @@
 
       function processAndUploadImage(imageId) {
         console.log(imageId);
-        fetch("http://localhost:8080/result/upload", {
+        fetch("https://daotaiwanapi.onrender.com/result/upload", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -135,7 +135,7 @@
         return list;
       }
       function fetchProcessedImages() {
-        fetch("http://localhost:8080/results")
+        fetch("https://daotaiwanapi.onrender.com/results")
           .then((response) => response.json())
           .then((data) => {
             const processedImageList =
@@ -159,7 +159,7 @@
       }
 
       function processAndUploadImage(imageId) {
-        fetch("http://localhost:8080/resultupload", {
+        fetch("https://daotaiwanapi.onrender.com/resultupload", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -181,7 +181,7 @@
         const formData = new FormData(document.getElementById("uploadForm"));
 
         console.log(formData);
-        fetch("http://localhost:8080/upload", {
+        fetch("https://daotaiwanapi.onrender.com/upload", {
           method: "POST",
           body: formData,
         })
@@ -210,7 +210,7 @@
         formData.append("originalImageId", originalImageId);
 
         // 发送 POST 请求到服务器
-        fetch("http://localhost:8080/uploadresult", {
+        fetch("https://daotaiwanapi.onrender.com/uploadresult", {
           method: "POST",
           body: formData,
         })

@@ -14,12 +14,16 @@
       <input type="file" name="image" id="fileInput" />
       <select name="type" required>
         <option value="">選擇圖片類別</option>
-        <option value="type1">類別1</option>
-        <option value="type2">類別2</option>
-        <option value="type3">類別3</option>
-        <option value="type4">類別4</option>
-        <option value="type5">類別5</option>
-        <option value="type6">類別6</option>
+        <option value="conbon_c">conbon_c</option>
+        <option value="conbon_h">conbon_h</option>
+        <option value="conbon_hl">conbon_hl</option>
+        <option value="conbon_u">conbon_u</option>
+        <option value="conbon_v">conbon_v</option>
+        <option value="poster_h">poster_h</option>
+        <option value="poster_hs">poster_hs</option>
+        <option value="poster_v">poster_v</option>
+        <option value="poster_vs">poster_vs</option>
+        <option value="poster_vu">poster_vu</option>
       </select>
       <button class="btn" type="button" onclick="uploadImage()">
         上傳圖片
@@ -31,19 +35,11 @@
       <!-- 這裡顯示從後端獲取的圖片列表 -->
     </div>
     <h2>臺灣街景 Result：</h2>
-    <form id="uploadResultForm" enctype="multipart/form-data">
-      <label for="file-upload" class="custom-file-upload">選擇圖片</label>
-      <input type="file" name="imageData" id="resultInput" />
-      <input
-        type="text"
-        name="originalImageId"
-        id="originalImageIdInput"
-        placeholder="輸入原始圖片的ID"
-      />
-      <button class="btn" type="button" onclick="uploadLocalImage()">
-        上傳圖片
-      </button>
-    </form>
+
+    <button class="btn" type="button" onclick="fetchProcessedImages()">
+      更新成果圖片
+    </button>
+
     <div id="processedImageList" class="gallery">
       <!-- 处理后的图片将被添加到这里 -->
     </div>
@@ -68,19 +64,10 @@
 
             images.forEach((image) => {
               const li = document.createElement("li"); // 創建 li 元素
-
               const img = document.createElement("img");
               img.src = image.url; // 使用 URL
               img.alt = image.filename;
-
-              const button = document.createElement("button");
-              button.textContent = "Process and Upload";
-              button.onclick = function () {
-                processAndUploadImage(image._id);
-              }; // 添加点击事件处理函数
-
               li.appendChild(img); // 把 img 放到 li 中
-              li.appendChild(button); // 添加按钮到 li
               ul.appendChild(li); // 把 li 放到 ul 中
             });
             imageList.appendChild(ul); // 把 ul 放到 imageList 中
@@ -90,50 +77,14 @@
         };
         xhr.send();
       }
-
-      function processAndUploadImage(imageId) {
-        console.log(imageId);
-        fetch("https://daotaiwanapi.onrender.com/result/upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ originalImageId: imageId }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert("Image processed and uploaded successfully");
-            console.log(data);
-            addProcessedImageToList(data); // 添加处理后的图片到列表
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Failed to process and upload image");
-          });
-      }
-
-      // 将处理后的图片添加到列表中
-      function addProcessedImageToList(image) {
-        console.log(image);
-        const processedList =
-          document.getElementById("processedImageList") ||
-          createProcessedList();
-        const li = document.createElement("li");
-        const img = document.createElement("img");
-        img.src = image.data.url;
-        img.alt = image.data.filename;
-        li.appendChild(img);
-        processedList.appendChild(li);
-        fetchImages(); // 重新加载图片列表
-      }
-
-      // 创建已处理图片的列表
+      // 新增渲染成果圖片列表
       function createProcessedList() {
         const list = document.createElement("ul");
         list.id = "processedImageList";
         document.body.appendChild(list);
         return list;
       }
+      //獲取渲染成果圖
       function fetchProcessedImages() {
         fetch("https://daotaiwanapi.onrender.com/results")
           .then((response) => response.json())
@@ -157,26 +108,6 @@
             console.error("Failed to fetch processed images:", error)
           );
       }
-
-      function processAndUploadImage(imageId) {
-        fetch("https://daotaiwanapi.onrender.com/result/upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ originalImageId: imageId }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert("Image processed and uploaded successfully");
-            fetchProcessedImages(); // Re-fetch the processed images list
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Failed to process and upload image");
-          });
-      }
-
       function uploadImage() {
         const formData = new FormData(document.getElementById("uploadForm"));
 
@@ -190,34 +121,6 @@
             console.log(data);
             alert(JSON.stringify(data.message));
             fetchImages(); // 重新加载图片列表
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Failed to upload image");
-          });
-      }
-      function uploadLocalImage() {
-        // 获取文件数据
-        const imageData = document.getElementById("resultInput").files[0];
-        // 获取原始图片ID
-        const originalImageId = document.getElementById(
-          "originalImageIdInput"
-        ).value;
-
-        // 构建 FormData 对象，并将文件数据和原始图片ID添加到其中
-        const formData = new FormData();
-        formData.append("imageData", imageData);
-        formData.append("originalImageId", originalImageId);
-
-        // 发送 POST 请求到服务器
-        fetch("https://daotaiwanapi.onrender.com/result/upload", {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert("Image uploaded successfully");
-            fetchProcessedImages(); // 重新加载已处理的图片列表
           })
           .catch((error) => {
             console.error("Error:", error);

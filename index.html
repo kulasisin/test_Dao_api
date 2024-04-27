@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DAO Taiwan 道臺灣</title>
     <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    
   </head>
   <body>
+    
     <h1>DAO Taiwan 道臺灣</h1>
+    <h2>開關燈SOCKET測試：</h2>
+    <button type="button " id="light-on-button" ">
+      開燈測試
+    </button>
+    <button type="button " id="light-off-button" ">
+      關燈測試
+    </button>
     <h2>上傳你的臺灣 DAO 路印象：</h2>
     <form id="uploadForm" enctype="multipart/form-data">
       <label for="file-upload" class="custom-file-upload">選擇圖片</label>
@@ -53,7 +64,7 @@
         const xhr = new XMLHttpRequest();
         // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
 
-        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
+        xhr.open("GET", "http://localhost:8080/images");
         xhr.onload = function () {
           if (xhr.status === 200) {
             const images = JSON.parse(xhr.responseText).data;
@@ -86,7 +97,7 @@
       }
       //獲取渲染成果圖
       function fetchProcessedImages() {
-        fetch("https://daotaiwanapi.onrender.com/results")
+        fetch("http://localhost:8080/results")
           .then((response) => response.json())
           .then((data) => {
             const processedImageList =
@@ -112,7 +123,7 @@
         const formData = new FormData(document.getElementById("uploadForm"));
 
         console.log(formData);
-        fetch("https://daotaiwanapi.onrender.com/upload", {
+        fetch("http://localhost:8080/upload", {
           method: "POST",
           body: formData,
         })
@@ -128,5 +139,6 @@
           });
       }
     </script>
+    <script src="/main.js" type="module"></script>
   </body>
 </html>

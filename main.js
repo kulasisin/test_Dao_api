@@ -1,6 +1,6 @@
 // 創建Socket.io客戶端連接
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
-const socket = io("http://localhost:8080", {
+const socket = io("https://daotaiwanapi.onrender.com", {
   withCredentials: false,
 });
 

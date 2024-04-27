@@ -64,7 +64,7 @@
         const xhr = new XMLHttpRequest();
         // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
 
-        xhr.open("GET", "http://localhost:8080/images");
+        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
         xhr.onload = function () {
           if (xhr.status === 200) {
             const images = JSON.parse(xhr.responseText).data;
@@ -97,7 +97,7 @@
       }
       //獲取渲染成果圖
       function fetchProcessedImages() {
-        fetch("http://localhost:8080/results")
+        fetch("https://daotaiwanapi.onrender.com/results")
           .then((response) => response.json())
           .then((data) => {
             const processedImageList =
@@ -123,7 +123,7 @@
         const formData = new FormData(document.getElementById("uploadForm"));
 
         console.log(formData);
-        fetch("http://localhost:8080/upload", {
+        fetch("https://daotaiwanapi.onrender.com/upload", {
           method: "POST",
           body: formData,
         })

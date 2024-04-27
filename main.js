@@ -8,7 +8,7 @@ const socket = io("https://daotaiwanapi.onrender.com", {
 document
   .getElementById("light-on-button")
   .addEventListener("click", function () {
-    const requestId = "662cadae8aaeb0ee47a68ece"; // 假設這是請求的ID
+    const requestId = "662a5cdde3dacb847ced645d"; // 假設這是請求的ID
     socket.emit("light-on", { _id: requestId });
     console.log("發送開燈訊號至伺服器");
   });
@@ -21,7 +21,7 @@ socket.on("light-on", function (data) {
   document
   .getElementById("light-off-button")
   .addEventListener("click", function () {
-    const requestId = "662cadae8aaeb0ee47a68ece"; // 假設這是請求的ID
+    const requestId = "662a5cdde3dacb847ced645d"; // 假設這是請求的ID
     socket.emit("light-off", { _id: requestId });
     console.log("發送關燈訊號至伺服器");
   });

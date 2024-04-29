@@ -76,7 +76,7 @@
 
             const ul = document.createElement("ul"); // 創建 ul 元素
 
-            images.forEach((image) => {
+            images.reverse().forEach((image) => {
               const li = document.createElement("li"); // 創建 li 元素
               const img = document.createElement("img");
               img.src = image.url; // 使用 URL
@@ -108,7 +108,7 @@
             processedImageList.innerHTML = "";
             const ul = document.createElement("ul");
 
-            data.data.forEach((image) => {
+            data.data.reverse().forEach((image) => {
               const li = document.createElement("li");
               const img = document.createElement("img");
               img.src = image.url;

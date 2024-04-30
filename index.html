@@ -13,7 +13,7 @@
     
     <h1>DAO Taiwan 道臺灣</h1>
     <h2>開關燈SOCKET測試：</h2>
-    <p>輸入要開關燈的 ID：</p>
+    <p>測試開關燈中的 ID：</p>
     <input type="text" id="light-id" />
     <button type="button " id="light-on-button" ">
       開燈測試
@@ -55,93 +55,8 @@
     </button>
 
     <div id="processedImageList" class="gallery">
-      <!-- 处理后的图片将被添加到这里 -->
+     
     </div>
-    <script>
-      // 初始加载图片列表
-      fetchImages();
-      fetchProcessedImages();
-
-      // 獲取圖片列表函數
-      function fetchImages() {
-        const xhr = new XMLHttpRequest();
-        // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
-
-        xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
-        xhr.onload = function () {
-          if (xhr.status === 200) {
-            const images = JSON.parse(xhr.responseText).data;
-            const imageList = document.getElementById("imageList");
-            imageList.innerHTML = ""; // 清空先前的列表
-
-            const ul = document.createElement("ul"); // 創建 ul 元素
-
-            images.reverse().forEach((image) => {
-              const li = document.createElement("li"); // 創建 li 元素
-              const img = document.createElement("img");
-              img.src = image.url; // 使用 URL
-              img.alt = image.filename;
-              li.appendChild(img); // 把 img 放到 li 中
-              ul.appendChild(li); // 把 li 放到 ul 中
-            });
-            imageList.appendChild(ul); // 把 ul 放到 imageList 中
-          } else {
-            console.error("獲取圖片列表失敗");
-          }
-        };
-        xhr.send();
-      }
-      // 新增渲染成果圖片列表
-      function createProcessedList() {
-        const list = document.createElement("ul");
-        list.id = "processedImageList";
-        document.body.appendChild(list);
-        return list;
-      }
-      //獲取渲染成果圖
-      function fetchProcessedImages() {
-        fetch("https://daotaiwanapi.onrender.com/results")
-          .then((response) => response.json())
-          .then((data) => {
-            const processedImageList =
-              document.getElementById("processedImageList");
-            processedImageList.innerHTML = "";
-            const ul = document.createElement("ul");
-
-            data.data.reverse().forEach((image) => {
-              const li = document.createElement("li");
-              const img = document.createElement("img");
-              img.src = image.url;
-              img.alt = image.filename;
-              li.appendChild(img);
-              ul.appendChild(li);
-            });
-            processedImageList.appendChild(ul);
-          })
-          .catch((error) =>
-            console.error("Failed to fetch processed images:", error)
-          );
-      }
-      function uploadImage() {
-        const formData = new FormData(document.getElementById("uploadForm"));
-
-        console.log(formData);
-        fetch("https://daotaiwanapi.onrender.com/upload", {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            alert(JSON.stringify(data.message));
-            fetchImages(); // 重新加载图片列表
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Failed to upload image");
-          });
-      }
-    </script>
     <script src="./main.js" type="module"></script>
   </body>
 </html>

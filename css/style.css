@@ -149,6 +149,7 @@ h2 {
   flex: 0 0 calc(33.33% - 20px); /* 每個元素佔據 33.33% 寬度，並且設置一些間距 */
   margin: 0.5%;
 }
-h2 {
-  color: brown;
+
+#imageList li input {
+  width: 100%;
 }

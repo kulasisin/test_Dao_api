@@ -27,6 +27,14 @@ function fetchImages() {
         const img = document.createElement("img");
         img.src = image.url; // 使用 URL
         img.alt = image.filename;
+
+        // 创建删除按钮
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "删除";
+        deleteButton.addEventListener("click", () => deleteImage(image._id));
+
+
+
         // 创建开灯按钮
         const lightOnButton = document.createElement("button");
         lightOnButton.textContent = "開燈測試";
@@ -56,6 +64,7 @@ function fetchImages() {
         li.appendChild(lightOffButton);
         li.appendChild(idInput);
         li.appendChild(typeInput);
+        li.appendChild(deleteButton);
 
         ul.appendChild(li); // 把 li 放到 ul 中
       });
@@ -116,6 +125,24 @@ function uploadImage() {
     });
 }
 
+// 删除貼圖的函数
+function deleteImage(imageId) {
+  fetch(`https://daotaiwanapi.onrender.com/image/delete/${imageId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.ok) {
+        alert("貼圖删除成功");
+        fetchImages(); // 重新加载图片列表
+      } else {
+        alert("貼圖删除失敗");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("貼圖删除失敗");
+    });
+}
 // 創建Socket.io客戶端連接
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 const socket = io("https://daotaiwanapi.onrender.com", {
@@ -150,16 +177,6 @@ socket.on("light-off", function (data) {
   console.log("伺服器收到關燈訊號:", data);
 });
 
-// function fetchTextureById(id, event) {
-//   fetch(`https://daotaiwanapi.onrender.com/image/${id}`)
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log(`獲取${id}貼圖資料`, data.data.category);
-//       const category = data.data.category;
-//       socket.emit(`${event}`, { _id: id, category: category });
-//     })
-//     .catch((error) => console.error("貼圖資料獲取失敗:", error));
-// }
 
 function fetchTextureById(id, type, event) {
   try {

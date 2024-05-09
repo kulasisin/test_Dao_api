@@ -16,7 +16,7 @@ function fetchImages() {
   xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
   xhr.onload = function () {
     if (xhr.status === 200) {
-      const images = JSON.parse(xhr.responseText).data;
+      const images = JSON.parse(xhr.responseText).data.slice(-30);;
       const imageList = document.getElementById("imageList");
       imageList.innerHTML = ""; // 清空先前的列表
 
@@ -164,6 +164,8 @@ document
 socket.on("light-on", function (data) {
   console.log("伺服器收到開燈訊號:", data);
 });
+
+
 
 document
   .getElementById("light-off-button")

@@ -16,7 +16,7 @@ function fetchImages() {
   xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
   xhr.onload = function () {
     if (xhr.status === 200) {
-      const images = JSON.parse(xhr.responseText).data.slice(-30);;
+      const images = JSON.parse(xhr.responseText).data.slice(-30);
       const imageList = document.getElementById("imageList");
       imageList.innerHTML = ""; // 清空先前的列表
 
@@ -91,7 +91,7 @@ function fetchProcessedImages() {
       processedImageList.innerHTML = "";
       const ul = document.createElement("ul");
 
-      data.data.reverse().forEach((image) => {
+      data.data.slice(-30).reverse().forEach((image) => {
         const li = document.createElement("li");
         const img = document.createElement("img");
         img.src = image.url;

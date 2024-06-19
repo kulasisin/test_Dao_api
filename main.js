@@ -11,9 +11,8 @@ uploadResultButton.addEventListener("click", () => fetchProcessedImages());
 // 獲取圖片列表函數
 function fetchImages() {
   const xhr = new XMLHttpRequest();
-  // xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
 
-  xhr.open("GET", "https://daotaiwanapi.onrender.com/images");
+  xhr.open("GET", "https://daotaiwanapi-1wi2.onrender.com/images");
   xhr.onload = function () {
     if (xhr.status === 200) {
       const images = JSON.parse(xhr.responseText).data.slice(-30);
@@ -84,7 +83,7 @@ function createProcessedList() {
 }
 //獲取渲染成果圖
 function fetchProcessedImages() {
-  fetch("https://daotaiwanapi.onrender.com/results")
+  fetch("https://daotaiwanapi-1wi2.onrender.com/results")
     .then((response) => response.json())
     .then((data) => {
       const processedImageList = document.getElementById("processedImageList");
@@ -109,7 +108,7 @@ function uploadImage() {
   const formData = new FormData(document.getElementById("uploadForm"));
 
   console.log(formData);
-  fetch("https://daotaiwanapi.onrender.com/upload", {
+  fetch("https://daotaiwanapi-1wi2.onrender.com/upload", {
     method: "POST",
     body: formData,
   })
@@ -127,7 +126,7 @@ function uploadImage() {
 
 // 删除貼圖的函数
 function deleteImage(imageId) {
-  fetch(`https://daotaiwanapi.onrender.com/image/delete/${imageId}`, {
+  fetch(`https://daotaiwanapi-1wi2.onrender.com/image/delete/${imageId}`, {
     method: "DELETE",
   })
     .then((response) => {
@@ -145,7 +144,7 @@ function deleteImage(imageId) {
 }
 // 創建Socket.io客戶端連接
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
-const socket = io("https://daotaiwanapi.onrender.com", {
+const socket = io("https://daotaiwanapi-1wi2.onrender.com", {
   withCredentials: false,
 });
 // 監聽後端發送的 message 訊號
